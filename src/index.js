@@ -15,32 +15,30 @@ var debounce = require('lodash.debounce');
 const qs = query => document.querySelector(query);
 
 const DEBOUNCE_DELAY = 300;
-let countries = [];
+
 const serchBox = qs('#search-box');
 const countryList = qs('country-list');
 const countryInfo = qs('country-info');
 let name;
+
 serchBox.addEventListener('keydown', () => {
   name = serchBox.value.trim();
   if (name.length > 0) {
-    fetchCountries(name).then(res =>
-      res.forEach(ele => {
-        const { name, capital, population, flag, languages } = ele;
-        // countries.push({
-        //   name: ele.name,
-        //   capital: ele.capital,
-        //   population: ele.population,
-        //   flag: ele.flag,
-        //   languages: ele.languages,
-        // });
-        console.log(name);
-        console.log(capital);
-        console.log(population);
-        console.log(flag);
-        console.log(languages);
-      }),
-    );
+    fetchCountries(name)
+      .then(res => {
+        let countries = [];
+        res.forEach(ele => {
+          const { name, capital, population, flag, languages } = ele;
+          countries.push({ name, capital, population, flag, languages });
+        });
+        return countries;
+      })
+      .then(coun => {
+        let countriesSize = coun.length;
+        if (countriesSize > 10) {
+        } else if (countriesSize < 11 && countriesSize > 1) {
+        } else if (countriesSize === 1) {
+        }
+      });
   }
 });
-
-
