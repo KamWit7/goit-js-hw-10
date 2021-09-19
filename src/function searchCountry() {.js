@@ -1,7 +1,7 @@
 import './css/styles.css';
 import fetchCountries from './fetchCountries';
 import Notiflix from 'notiflix';
-const debounce = require('lodash.debounce');
+var debounce = require('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
 const qs = query => document.querySelector(query);
@@ -35,7 +35,6 @@ function searchCountry() {
         } else if (countriesSize > 1 && countriesSize < 11) {
           countries.forEach(ele => {
             const { name, flag } = ele;
-
             countryList.style = 'list-style-type: none; padding: 0'; // no dot, padding
 
             // countryList
@@ -53,15 +52,13 @@ function searchCountry() {
             listItem.append(bName);
           });
         }
-        return countries;
       })
-      .then(country => {
-        countriesSize = country.length;
-
+      .then(countries => {
+        countriesSize = countries.length;
         if (countriesSize === 1) {
-          const { name, capital, population, flag, languages } = country[0];
+          const { name, capital, population, flag, languages } = countries[0];
 
-          let languageStr =
+          let languagesStr =
             languages.length > 1 ? languages.map(elem => `${elem.name}`) : languages[0].name;
 
           // countryInfo
@@ -84,7 +81,7 @@ function searchCountry() {
           countryInfo.append(pPopulation);
 
           let pLang = document.createElement('p');
-          pLang.innerHTML = `<b>Languages:</b> ${languageStr}`;
+          pLang.innerHTML = `<b>Languages:</b> ${languagesStr}`;
           countryInfo.append(pLang);
         }
       })
