@@ -1,16 +1,17 @@
 import './css/styles.css';
 import fetchCountries from './fetchCountries';
 import Notiflix from 'notiflix';
-const debounce = require('lodash.debounce');
 
-const DEBOUNCE_DELAY = 300;
 const qs = query => document.querySelector(query);
+const log = str => console.log(str);
+const clear = elems => [...elems.children].forEach(li => li.remove());
+const DEBOUNCE_DELAY = 300;
 const serchBox = qs('#search-box');
 const countryList = qs('.country-list');
 const countryInfo = qs('.country-info');
-const log = str => console.log(str);
-const clear = elems => [...elems.children].forEach(li => li.remove());
+const debounce = require('lodash.debounce');
 let countriesSize;
+
 serchBox.addEventListener('keydown', debounce(searchCountry, DEBOUNCE_DELAY));
 
 function searchCountry() {
@@ -22,8 +23,8 @@ function searchCountry() {
 
     fetchCountries(name)
       .then(countrysPack => {
-        return countrysPack.map(ele => {
-          const { name, capital, population, flag, languages } = ele;
+        return countrysPack.map(country => {
+          const { name, capital, population, flag, languages } = country;
           return { name, capital, population, flag, languages }; //unpack needed variable
         });
       })
@@ -36,7 +37,8 @@ function searchCountry() {
           countries.forEach(ele => {
             const { name, flag } = ele;
 
-            countryList.style = 'list-style-type: none; padding: 0'; // no dot, padding
+            countryList.style.listStyleType = 'none'; // no dot
+            countryList.style.padding = '0';  // no padding
 
             // countryList
             let listItem = document.createElement('li');
@@ -56,13 +58,13 @@ function searchCountry() {
         return countries;
       })
       .then(country => {
-        countriesSize = country.length;
+        countriesSize = country.length; // can be biger then 1
 
         if (countriesSize === 1) {
           const { name, capital, population, flag, languages } = country[0];
 
           let languageStr =
-            languages.length > 1 ? languages.map(elem => `${elem.name}`) : languages[0].name;
+            languages.length > 1 ? languages.map(elem => `${elem.name}`) : languages[0].name; // create one string from langs 
 
           // countryInfo
           let imgFlag = document.createElement('img');
