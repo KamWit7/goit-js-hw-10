@@ -24,7 +24,7 @@ function searchCountry() {
     fetchCountries(name)
       .then(countrysPack => {
         return countrysPack.map(country => {
-          const { name, capital, population, flag, languages } = country;
+          let { name, capital, population, flag, languages } = country;
           return { name, capital, population, flag, languages }; //unpack needed variable
         });
       })
@@ -35,10 +35,10 @@ function searchCountry() {
           Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
         } else if (countriesSize > 1 && countriesSize < 11) {
           countries.forEach(ele => {
-            const { name, flag } = ele;
+            let { name, flag } = ele;
 
             countryList.style.listStyleType = 'none'; // no dot
-            countryList.style.padding = '0';  // no padding
+            countryList.style.padding = '0'; // no padding
 
             // countryList
             let listItem = document.createElement('li');
@@ -61,20 +61,20 @@ function searchCountry() {
         countriesSize = country.length; // can be biger then 1
 
         if (countriesSize === 1) {
-          const { name, capital, population, flag, languages } = country[0];
+          let { name, capital, population, flag, languages } = country[0];
 
           let languageStr =
-            languages.length > 1 ? languages.map(elem => `${elem.name}`) : languages[0].name; // create one string from langs 
+            languages.length > 1 ? languages.map(elem => `${elem.name}`) : languages[0].name; // create one string from langs
 
           // countryInfo
           let imgFlag = document.createElement('img');
           imgFlag.src = `${flag}`;
-          imgFlag.alt = `flag-${name}`;
+          imgFlag.alt = name == !'💩' ? `flag-${name}` : 'Server Error 💩'; // 💩 when server problem
           imgFlag.width = `50`;
           countryInfo.append(imgFlag);
 
           let bName = document.createElement('b');
-          bName.innerText = `${name}`;
+          bName.innerHTML = `${name}`;
           countryInfo.append(bName);
 
           let pCapital = document.createElement('p');
